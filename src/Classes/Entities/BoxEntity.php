@@ -4,7 +4,7 @@ namespace BoxCheckout\Entities;
 
 use PHPUnit\Runner\Exception;
 
-class BoxEntity {
+class BoxEntity extends ValidationEntity {
     protected $id;
     protected $size;
     protected $strength;
@@ -24,8 +24,10 @@ class BoxEntity {
     {
         $this->id = (int) $this->id;
         $this->validateSize();
-        $this->validateStrength($this->strength);
-
+        self::validateExistsAndLength($this->size, 6);
+        $this->validateStrength();
+        self::validateExistsAndLength($this->strength, 12);
+        $this->price = self::validateFloat($this->price);
     }
 
     public function validateSize() : bool
