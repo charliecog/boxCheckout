@@ -10,13 +10,9 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
     protected $strength;
     protected $price;
 
-    public function __construct(int $id, string $size, string $strength, float $price)
+    //data is hydrated directly into the properties so don't need to pass params into construct
+    public function __construct()
     {
-        $this->id = $id;
-        $this->size = $size;
-        $this->strength = $strength;
-        $this->price = $price;
-
         $this->sanitiseData();
     }
 
