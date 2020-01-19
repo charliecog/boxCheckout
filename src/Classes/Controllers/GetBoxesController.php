@@ -27,7 +27,7 @@ class GetBoxesController
     {
         $data = [
             'status' => false,
-            'message' => 'No boxes found',
+            'message' => 'No boxes retrieved',
             'data' => []
         ];
         $statusCode = 400;
@@ -41,7 +41,7 @@ class GetBoxesController
         if (!empty($boxes)) {
             $data = [
                 'status' => true,
-                'message' => 'Query Successful',
+                'message' => 'Boxes retrieved',
                 'data' => $boxes
             ];
             $statusCode = 200;
