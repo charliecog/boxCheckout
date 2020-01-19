@@ -28,4 +28,8 @@ return function (App $app) {
         return $db;
     };
 
+    $container['BoxModel'] = new \BoxCheckout\Factories\BoxModelFactory();
+    
+    $container['GetBoxesController'] = new \BoxCheckout\Factories\GetBoxesControllerFactory();
+
 };
