@@ -20,6 +20,11 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
         $this->sanitiseData();
     }
 
+    /**
+     * Sanitise the data within the Entity
+     *
+     * @return void
+     */
     private function sanitiseData()
     {
         $this->id = (int) $this->id;
@@ -30,6 +35,12 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
         $this->price = self::validateFloat($this->price);
     }
 
+    /**
+     * Validates entity size value, throws an Exception if not
+     *
+     * @return mixed, true if valid
+     * @throws \Exception if not a valid selection
+     */
     public function validateSize() : bool
     {
         if($this->size == 'small' || $this->size == 'medium' || $this->size == 'large'){
@@ -39,6 +50,12 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
         }
     }
 
+    /**
+     * Validates entity strength value, throws an Exception if not
+     *
+     * @return mixed, true if valid
+     * @throws \Exception if not a valid selection
+     */
     public function validateStrength() : bool
     {
         if($this->strength == 'standard' || $this->strength == 'strong' || $this->strength == 'extra_strong'){
@@ -48,6 +65,11 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
         }
     }
 
+    /**
+     * Returns entity data
+     *
+     * @return array, the entity data
+     */
     public function jsonSerialize()
     {
         return [
