@@ -52,4 +52,12 @@ class BoxEntityTest extends TestCase
         $boxEntity = new BoxEntity(1,'small', ['strong'], 2.99);
         $boxEntity->validateStrength();
     }
+
+    public function testJsonSerializeSuccess()
+    {
+        $boxEntity = new BoxEntity(1,'small', 'strong', 2.99);
+        $result = $boxEntity->jsonSerialize();
+        $expected = ['id'=>1,'size'=>'small','strength'=>'strong','price'=>2.99];
+        $this->assertEquals($result, $expected);
+    }
 }

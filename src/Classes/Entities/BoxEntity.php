@@ -4,7 +4,7 @@ namespace BoxCheckout\Entities;
 
 use PHPUnit\Runner\Exception;
 
-class BoxEntity extends ValidationEntity {
+class BoxEntity extends ValidationEntity implements \JsonSerializable {
     protected $id;
     protected $size;
     protected $strength;
@@ -46,6 +46,16 @@ class BoxEntity extends ValidationEntity {
         } else {
             throw new Exception('box strength is not valid');
         }
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'size' => $this->size,
+            'strength' => $this->strength,
+            'price' => $this->price
+        ];
     }
 
 }
