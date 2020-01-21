@@ -2,7 +2,9 @@
 
 namespace BoxCheckout\Entities;
 
-class AddressEntity extends ValidationEntity
+use BoxCheckout\Interfaces\Sanitiseable;
+
+class AddressEntity extends ValidationEntity implements Sanitiseable
 {
     protected $firstLine;
     protected $secondLine;
