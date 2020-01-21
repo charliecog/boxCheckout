@@ -2,7 +2,7 @@
 
 namespace BoxCheckout\Interfaces;
 
-interface Sanitiseable
+interface SanitiseableInterface
 {
     public function sanitiseData();
 }
