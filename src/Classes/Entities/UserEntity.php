@@ -68,7 +68,64 @@ class UserEntity extends ValidationEntity implements Sanitiseable
             $this->title === 'mx'){
             return true;
         } else {
-            throw new \Error('title is not valid');
+            throw new \Exception('title is not valid');
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getBusinessName()
+    {
+        return $this->businessName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSecondaryPhone()
+    {
+        return $this->secondaryPhone;
+    }
+
 }
