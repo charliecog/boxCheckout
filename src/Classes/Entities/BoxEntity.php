@@ -2,7 +2,6 @@
 
 namespace BoxCheckout\Entities;
 
-
 class BoxEntity extends ValidationEntity implements \JsonSerializable {
     protected $id;
     protected $size;
