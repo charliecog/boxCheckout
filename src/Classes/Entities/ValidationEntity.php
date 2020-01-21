@@ -36,4 +36,16 @@ abstract class ValidationEntity
             throw new \Exception('Not a valid float');
         }
     }
+
+    /**
+     * Sanitise an input by trimming whitespace and stripping unwanted tags
+     *
+     * @param string $string
+     * @return string, which will return the trimmed/sanitised string
+     */
+    public function sanitiseString(string $string) :string
+    {
+        $trimmed = trim($string);
+        return filter_var($trimmed, FILTER_SANITIZE_STRING);
+    }
 }
