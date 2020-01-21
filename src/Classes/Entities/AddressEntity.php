@@ -2,7 +2,6 @@
 
 namespace BoxCheckout\Entities;
 
-
 class AddressEntity extends ValidationEntity
 {
     protected $firstLine;
