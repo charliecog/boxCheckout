@@ -48,4 +48,24 @@ abstract class ValidationEntity
         $trimmed = trim($string);
         return filter_var($trimmed, FILTER_SANITIZE_STRING);
     }
+
+    /**
+     * Checks that the entry is a number starting with 0 of the right length
+     *
+     * @param string $number the tel number
+     *
+     * @throws \Exception if not a valid phone num
+     */
+    public function validatePhoneNumber(string $number): void
+    {
+        //phone number can't include letters.
+        if (preg_match("/[A-Z]/i", $number) != 0) {
+            throw new \Exception('Phone number not valid');
+        }
+
+        //phone number must be valid.
+        if (preg_match('/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/', $number) != 0) {
+            throw new \Exception('Phone number not valid');
+        }
+    }
 }
