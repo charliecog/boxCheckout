@@ -19,7 +19,7 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
      *
      * @return void
      */
-    private function sanitiseData()
+    private function sanitiseData() :void
     {
         $this->id = (int) $this->id;
         $this->validateSize();
