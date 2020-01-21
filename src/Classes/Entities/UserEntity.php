@@ -36,4 +36,23 @@ class UserEntity extends ValidationEntity implements Sanitiseable
     {
         
     }
+
+    /**
+     * Validates entity title value, throws an Exception if not valid
+     *
+     * @return mixed, true if valid
+     * @throws \Error if not a valid selection
+     */
+    public function validateTitle() : bool
+    {
+        if( $this->title === 'mr' ||
+            $this->title === 'mrs' ||
+            $this->title === 'miss' ||
+            $this->title === 'master' ||
+            $this->title === 'mx'){
+            return true;
+        } else {
+            throw new \Error('title is not valid');
+        }
+    }
 }
