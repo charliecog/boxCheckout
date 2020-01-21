@@ -2,7 +2,6 @@
 
 namespace BoxCheckout\Entities;
 
-use PHPUnit\Runner\Exception;
 
 class BoxEntity extends ValidationEntity implements \JsonSerializable {
     protected $id;
@@ -35,14 +34,14 @@ class BoxEntity extends ValidationEntity implements \JsonSerializable {
      * Validates entity size value, throws an Exception if not
      *
      * @return mixed, true if valid
-     * @throws \Exception if not a valid selection
+     * @throws \Error if not a valid selection
      */
     public function validateSize() : bool
     {
         if($this->size == 'small' || $this->size == 'medium' || $this->size == 'large'){
             return true;
         } else {
-            throw new Exception('box size is not valid');
+            throw new \Error('box size is not valid');
         }
     }
 
