@@ -6,7 +6,7 @@ use BoxCheckout\Models\OrderModel;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class addOrderController
+class AddOrderController
 {
     private $orderModel;
 
@@ -66,6 +66,8 @@ class addOrderController
             $orderComplete = $this->orderModel->getDb()->commit();
 
         } catch (\PDOException $exception) {
+            $data['message'] = $exception->getMessage();
+        } catch (\Exception $exception) {
             $data['message'] = $exception->getMessage();
         }
 
