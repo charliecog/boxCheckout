@@ -25,6 +25,18 @@ class AddressEntityTest extends TestCase
         $this->assertInstanceOf(AddressEntity::class, $address);
     }
 
+    public function testConstructorPostcodeFailure()
+    {
+        $this->expectException(\Exception::class);
+        $firstLine = '52 Taylor Ave';
+        $secondLine = 'Kew Gardens';
+        $town = 'Richmond';
+        $postcode = 'TW9 4EDsdjklfjslkdfjjsdlj';
+        $county = 'Surrey';
+        $country = 'United Kingdom';
+        return new AddressEntity($firstLine, $secondLine, $town, $postcode, $county, $country);
+    }
+
     public function testGetters()
     {
         $address = $this->createAddressEntity();
