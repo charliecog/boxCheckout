@@ -35,7 +35,9 @@ class addOrderController
         $newOrderData = $request->getParsedBody();
 
         $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
+        $user = $this->orderModel->createUserEntity(...$newOrderData['user']);
 
+        
 
 
         try {
