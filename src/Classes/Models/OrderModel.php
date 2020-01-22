@@ -17,6 +17,43 @@ class OrderModel
     }
 
     /**
+     * @return \PDO
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * Creates an address entity.
+     *
+     * @param string $firstLine first Line of the address
+     * @param string $secondLine second Line of the address
+     * @param string $town town of the address
+     * @param string $postcode postcode of the address
+     * @param string $county county of the address
+     * @param string $country country of the address
+     *
+     * @return AddressEntity The created AddressEntity.
+     */
+    public function createAddressEntity(
+        string $firstLine,
+        string $secondLine,
+        string $town,
+        string $postcode,
+        string $county,
+        string $country
+    ): AddressEntity {
+        return new AddressEntity(
+            $firstLine,
+            $secondLine,
+            $town,
+            $postcode,
+            $county,
+            $country);
+    }
+
+    /**
      * Adds address data to the database.
      *
      * @param \BoxCheckout\Entities\AddressEntity All the details of the address
@@ -36,6 +73,38 @@ class OrderModel
         $query->bindParam(':country', $address->getCountry());
         $query->execute();
         return $this->db->lastInsertId();
+    }
+
+    /**
+     * Creates a user entity.
+     *
+     * @param string $title
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $phone
+     * @param string $businessName
+     * @param string $secondaryPhone
+     *
+     * @return UserEntity The created UserEntity.
+     */
+    public function createUserEntity(
+        string $title,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $phone,
+        string $businessName,
+        string $secondaryPhone
+    ): UserEntity {
+        return new UserEntity(
+            $title,
+            $firstName,
+            $lastName,
+            $email,
+            $phone,
+            $businessName,
+            $secondaryPhone);
     }
 
     /**
@@ -62,6 +131,35 @@ class OrderModel
     }
 
     /**
+     * Creates a Order entity.
+     *
+     * @param int $userId
+     * @param int $deliveryId
+     * @param int $paymentId
+     * @param float $totalPrice
+     * @param int $discountApplied
+     * @param float $totalChargedPrice
+     *
+     * @return OrderEntity The created OrderEntity.
+     */
+    public function createOrderEntity(
+        int $userId,
+        int $deliveryId,
+        int $paymentId,
+        float $totalPrice,
+        int $discountApplied,
+        float $totalChargedPrice
+    ): OrderEntity {
+        return new OrderEntity(
+            $userId,
+            $deliveryId,
+            $paymentId,
+            $totalPrice,
+            $discountApplied,
+            $totalChargedPrice);
+    }
+
+    /**
      * Adds Order data to the database.
      *
      * @param \BoxCheckout\Entities\OrderEntity All the details of the Order
@@ -84,21 +182,43 @@ class OrderModel
     }
 
     /**
+     * Creates array of OrderDetailsEntities from products array.
+     *
+     * @param array $products the OrderDetails as an assoc array
+     * @param int $orderId the orderId the orderDetails are associated with
+     *
+     * @return array $result The created array of OrderDetailEntities
+     */
+    public function createOrderDetailsArray(array $products, int $orderId): array
+    {
+        $result = [];
+        foreach ($products as $product){
+            $result[] = new OrderDetailsEntity($orderId, $product['pid'], $product['quantity']);
+        }
+        return $result;
+    }
+
+    /**
      * Adds OrderDetails data to the database.
      *
-     * @param \BoxCheckout\Entities\OrderDetailsEntity All the details of the OrderDetails
+     * @param array $arrOfOrderDetails the OrderDetails objects
      *
-     * @return int The id of the inserted row.
+     * @return int the last inserted id of the last product
      */
-    public function addOrderDetails(OrderDetailsEntity $orderDetails)
+    public function addOrderDetails(array $arrOfOrderDetails): int
     {
         $query = $this->db->prepare(
             "INSERT INTO `order_details` (`order_id`, `box_id`, `quantity`) VALUES (:orderId, :boxId, :quantity);"
         );
-        $query->bindParam(':orderId', $orderDetails->getOrderId());
-        $query->bindParam(':boxId', $orderDetails->getBoxId());
-        $query->bindParam(':quantity', $orderDetails->getQuantity());
-        $query->execute();
+        foreach ($arrOfOrderDetails as $orderDetails){
+            if($orderDetails instanceof OrderDetailsEntity){
+                $query->bindParam(':orderId', $orderDetails->getOrderId());
+                $query->bindParam(':boxId', $orderDetails->getBoxId());
+                $query->bindParam(':quantity', $orderDetails->getQuantity());
+                $query->execute();
+            }
+        }
+
         return $this->db->lastInsertId();
     }
 }
