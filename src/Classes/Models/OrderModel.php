@@ -17,6 +17,35 @@ class OrderModel
     }
 
     /**
+     * Creates an address entity.
+     *
+     * @param string $firstLine first Line of the address
+     * @param string $secondLine second Line of the address
+     * @param string $town town of the address
+     * @param string $postcode postcode of the address
+     * @param string $county county of the address
+     * @param string $country country of the address
+     *
+     * @return AddressEntity The created AddressEntity.
+     */
+    public function createAddressEntity(
+        string $firstLine,
+        string $secondLine,
+        string $town,
+        string $postcode,
+        string $county,
+        string $country
+    ): AddressEntity {
+        return new AddressEntity(
+            $firstLine,
+            $secondLine,
+            $town,
+            $postcode,
+            $county,
+            $country);
+    }
+
+    /**
      * Adds address data to the database.
      *
      * @param \BoxCheckout\Entities\AddressEntity All the details of the address
@@ -36,6 +65,38 @@ class OrderModel
         $query->bindParam(':country', $address->getCountry());
         $query->execute();
         return $this->db->lastInsertId();
+    }
+
+    /**
+     * Creates a user entity.
+     *
+     * @param string $title
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $phone
+     * @param string $businessName
+     * @param string $secondaryPhone
+     *
+     * @return UserEntity The created UserEntity.
+     */
+    public function createUserEntity(
+        string $title,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $phone,
+        string $businessName,
+        string $secondaryPhone
+    ): UserEntity {
+        return new UserEntity(
+            $title,
+            $firstName,
+            $lastName,
+            $email,
+            $phone,
+            $businessName,
+            $secondaryPhone);
     }
 
     /**
