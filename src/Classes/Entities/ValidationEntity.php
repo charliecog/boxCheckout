@@ -63,11 +63,38 @@ abstract class ValidationEntity
             throw new \Exception('Phone number not validd');
         }
 
-
         //phone number must be valid.
         if (preg_match('/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/', $number) == 0 &&
             preg_match('/^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/', $number) == 0) {
             throw new \Exception('Phone number not valid');
+        }
+    }
+
+    /**
+     * Checks that the integer is positive
+     *
+     * @param integer $integer
+     *
+     * @throws \Exception if not an positive int
+     */
+    public function validatePositiveInt(int $integer): void
+    {
+        if ($integer < 0) {
+            throw new \Exception('Integer should be positive');
+        }
+    }
+
+    /**
+     * Checks that the float is positive
+     *
+     * @param float $float
+     *
+     * @throws \Exception if not an positive float
+     */
+    public function validatePositiveFloat(float $float): void
+    {
+        if ($float < 0) {
+            throw new \Exception('Integer should be positive');
         }
     }
 }
