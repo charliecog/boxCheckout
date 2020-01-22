@@ -54,7 +54,7 @@ abstract class ValidationEntity
      *
      * @param string $number the tel number
      *
-     * @throws \Exception if not a valid phone num
+     * @throws \Exception if not a valid phone (uk mobile or uk landline)
      */
     public function validatePhoneNumber(string $number): void
     {
