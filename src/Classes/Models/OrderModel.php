@@ -3,6 +3,7 @@
 namespace BoxCheckout\Models;
 
 use BoxCheckout\Entities\AddressEntity;
+use BoxCheckout\Entities\OrderEntity;
 use BoxCheckout\Entities\UserEntity;
 
 class OrderModel
@@ -55,6 +56,28 @@ class OrderModel
         $query->bindParam(':email', $user->getEmail());
         $query->bindParam(':phone', $user->getPhone());
         $query->bindParam(':secondaryPhone', $user->getSecondaryPhone());
+        $query->execute();
+        return $this->db->lastInsertId();
+    }
+
+    /**
+     * Adds Order data to the database.
+     *
+     * @param \BoxCheckout\Entities\OrderEntity All the details of the user
+     *
+     * @return int The id of the inserted row.
+     */
+    public function addOrder(OrderEntity $order)
+    {
+        $query = $this->db->prepare(
+            "INSERT INTO `orders` (`user_id`, `delivery_address_id`, `payment_transaction_id`, `total_price`, `discount_applied`, `total_charged_price`) VALUES (:userId, :deliveryId, :paymentId, :totalPrice, :discountApplied, :totalChargedPrice);"
+        );
+        $query->bindParam(':userId', $order->getUserId());
+        $query->bindParam(':deliveryId', $order->getDeliveryId());
+        $query->bindParam(':paymentId', $order->getPaymentId());
+        $query->bindParam(':totalPrice', $order->getTotalPrice());
+        $query->bindParam(':discountApplied', $order->getDiscountApplied());
+        $query->bindParam(':totalChargedPrice', $order->getTotalChargedPrice());
         $query->execute();
         return $this->db->lastInsertId();
     }
