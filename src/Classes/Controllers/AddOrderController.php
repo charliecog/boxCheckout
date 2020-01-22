@@ -5,6 +5,7 @@ namespace BoxCheckout\Controllers;
 use BoxCheckout\Models\OrderModel;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use function Sodium\add;
 
 class AddOrderController
 {
@@ -34,23 +35,31 @@ class AddOrderController
 
         $newOrderData = $request->getParsedBody();
 
-        if(
-            !isset($newOrderData['address']) ||
-            !isset($newOrderData['user']) ||
-            !isset($newOrderData['products']) ||
-            !isset($newOrderData['totalPrice']) ||
-            !isset($newOrderData['discount']) ||
-            !isset($newOrderData['totalChargedPrice']) ||
-            !isset($newOrderData['paymentId'])
-
-        ){
+        if($this->orderModel->checkAllKeysPresent($newOrderData)){
             return $response->withJson($data, $statusCode);
         }
 
-        if(isset($newOrderData['address'])){
-            $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
-        }
-        $user = $this->orderModel->createUserEntity(...$newOrderData['user']);
+        $addressData = $newOrderData['address'];
+
+        $address = $this->orderModel->createAddressEntity(
+            $addressData['firstLine'],
+            $addressData['secondLine'],
+            $addressData['town'],
+            $addressData['postcode'],
+            $addressData['county'],
+            $addressData['country']);
+
+
+        $userData = $newOrderData['user'];
+
+        $user = $this->orderModel->createUserEntity(
+            $userData['title'],
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['email'],
+            $userData['phone'],
+            $userData['businessName'],
+            $userData['secondaryPhone']);
 
         $orderData = [
             'userId'=> null,
@@ -58,7 +67,7 @@ class AddOrderController
             'paymentId'=> $newOrderData['paymentId'],
             'totalPrice'=> $newOrderData['totalPrice'],
             'discountApplied'=> $newOrderData['discount'],
-            'totalChargedPrice'=> $newOrderData['totalChargedPrice']
+            'totalPriceCharged'=> $newOrderData['totalPriceCharged']
         ];
 
         try {
@@ -72,26 +81,30 @@ class AddOrderController
             $orderData['deliveryId'] = $insertedAddressId;
             $orderData['userId'] = $insertedUserId;
 
-            $order = $this->orderModel->createOrderEntity(...$orderData);
+            $order = $this->orderModel->createOrderEntity(
+                $orderData['userId'],
+                $orderData['deliveryId'],
+                $orderData['paymentId'],
+                $orderData['totalPrice'],
+                $orderData['discountApplied'],
+                $orderData['totalPriceCharged']);
             $orderId = $this->orderModel->addOrder($order);
 
             $orderDetailsArray = $this->orderModel->createOrderDetailsArray($newOrderData['products'], $orderId);
-            $this->orderModel->addOrderDetails($orderDetailsArray);
+            $orderComplete = $this->orderModel->addOrderDetails($orderDetailsArray);
 
-            $orderComplete = $this->orderModel->getDb()->commit();
+            $this->orderModel->getDb()->commit();
+            $data['data']['orderId'] = $orderId;
 
-        } catch (\PDOException $exception) {
-            $data['message'] = $exception->getMessage();
-        } catch (\Exception $exception) {
+        } catch (\PDOException $PDOException) {
+            $data['message'] = $PDOException->getMessage();
+        } catch (\Exception $exception){
             $data['message'] = $exception->getMessage();
         }
 
         if (!empty($orderComplete)) {
-            $data = [
-                'status' => true,
-                'message' => 'Order created',
-                'data' => []
-            ];
+            $data['status'] = true;
+            $data['message'] = 'Order created';
             $statusCode = 200;
         }
 
