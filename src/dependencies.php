@@ -32,5 +32,6 @@ return function (App $app) {
     $container['OrderModel'] = new \BoxCheckout\Factories\OrderModelFactory();
 
     $container['GetBoxesController'] = new \BoxCheckout\Factories\GetBoxesControllerFactory();
+    $container['AddOrderController'] = new \BoxCheckout\Factories\AddOrderControllerFactory();
 
 };

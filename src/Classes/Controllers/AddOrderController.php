@@ -67,6 +67,8 @@ class AddOrderController
 
         } catch (\PDOException $exception) {
             $data['message'] = $exception->getMessage();
+        } catch (\Exception $exception) {
+            $data['message'] = $exception->getMessage();
         }
 
         if (!empty($orderComplete)) {
