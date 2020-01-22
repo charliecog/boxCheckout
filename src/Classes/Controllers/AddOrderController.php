@@ -34,7 +34,22 @@ class AddOrderController
 
         $newOrderData = $request->getParsedBody();
 
-        $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
+        if(
+            !isset($newOrderData['address']) ||
+            !isset($newOrderData['user']) ||
+            !isset($newOrderData['products']) ||
+            !isset($newOrderData['totalPrice']) ||
+            !isset($newOrderData['discount']) ||
+            !isset($newOrderData['totalChargedPrice']) ||
+            !isset($newOrderData['paymentId'])
+
+        ){
+            return $response->withJson($data, $statusCode);
+        }
+
+        if(isset($newOrderData['address'])){
+            $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
+        }
         $user = $this->orderModel->createUserEntity(...$newOrderData['user']);
 
         $orderData = [
