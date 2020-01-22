@@ -29,7 +29,8 @@ return function (App $app) {
     };
 
     $container['BoxModel'] = new \BoxCheckout\Factories\BoxModelFactory();
-    
+    $container['OrderModel'] = new \BoxCheckout\Factories\OrderModelFactory();
+
     $container['GetBoxesController'] = new \BoxCheckout\Factories\GetBoxesControllerFactory();
 
 };
