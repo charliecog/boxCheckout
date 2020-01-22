@@ -94,8 +94,8 @@ class OrderModel
         string $lastName,
         string $email,
         string $phone,
-        string $businessName,
-        string $secondaryPhone
+        $businessName = null,
+        $secondaryPhone = null
     ): UserEntity {
         return new UserEntity(
             $title,
@@ -238,8 +238,6 @@ class OrderModel
             !isset($requestData['user']['lastName']) ||
             !isset($requestData['user']['email']) ||
             !isset($requestData['user']['phone']) ||
-            !isset($requestData['user']['businessName']) ||
-            !isset($requestData['user']['secondaryPhone']) ||
             !isset($requestData['products']) ||
             count($requestData['products']) < 1 ||
             !isset($requestData['totalPrice']) ||

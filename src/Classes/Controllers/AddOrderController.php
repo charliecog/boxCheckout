@@ -5,7 +5,6 @@ namespace BoxCheckout\Controllers;
 use BoxCheckout\Models\OrderModel;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use function Sodium\add;
 
 class AddOrderController
 {
@@ -33,6 +32,8 @@ class AddOrderController
         ];
         $statusCode = 400;
 
+        try {
+
         $newOrderData = $request->getParsedBody();
 
         if($this->orderModel->checkAllKeysPresent($newOrderData)){
@@ -52,14 +53,17 @@ class AddOrderController
 
         $userData = $newOrderData['user'];
 
+        $businessName = $userData['businessName'] ?: null;
+        $secondaryPhone = $userData['secondaryPhone'] ?: null;
+
         $user = $this->orderModel->createUserEntity(
             $userData['title'],
             $userData['firstName'],
             $userData['lastName'],
             $userData['email'],
             $userData['phone'],
-            $userData['businessName'],
-            $userData['secondaryPhone']);
+            $businessName,
+            $secondaryPhone);
 
         $orderData = [
             'userId'=> null,
@@ -69,8 +73,6 @@ class AddOrderController
             'discountApplied'=> $newOrderData['discount'],
             'totalPriceCharged'=> $newOrderData['totalPriceCharged']
         ];
-
-        try {
 
             $this->orderModel->getDb()->beginTransaction();
 

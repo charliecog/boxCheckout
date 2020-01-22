@@ -11,8 +11,8 @@ class UserEntity extends ValidationEntity implements Sanitiseable
     protected $lastName;
     protected $email;
     protected $phone;
-    protected $businessName = null;
-    protected $secondaryPhone = null;
+    protected $businessName;
+    protected $secondaryPhone;
 
     public function __construct(
         string $title,
@@ -20,8 +20,8 @@ class UserEntity extends ValidationEntity implements Sanitiseable
         string $lastName,
         string $email,
         string $phone,
-        string $businessName,
-        string $secondaryPhone
+        $businessName = null,
+        $secondaryPhone = null
     ) {
         $this->title = $title;
         $this->firstName = $firstName;
