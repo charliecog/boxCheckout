@@ -6,7 +6,7 @@ use BoxCheckout\Models\OrderModel;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class addOrderController
+class AddOrderController
 {
     private $orderModel;
 
