@@ -21,7 +21,7 @@ class addOrderController
      * @param Request $request HTTP request
      * @param Response $response HTTP response
      * @param array $args
-     * @return Response returns JSON with boxes data
+     * @return Response returns JSON response
      */
     public function __invoke(Request $request, Response $response, array $args) : Response
     {
@@ -37,26 +37,43 @@ class addOrderController
         $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
         $user = $this->orderModel->createUserEntity(...$newOrderData['user']);
 
-        
-
+        $orderData = [
+            'userId'=> null,
+            'deliveryId'=> null,
+            'paymentId'=> $newOrderData['paymentId'],
+            'totalPrice'=> $newOrderData['totalPrice'],
+            'discountApplied'=> $newOrderData['discount'],
+            'totalChargedPrice'=> $newOrderData['totalChargedPrice']
+        ];
 
         try {
-//            $insertedAddressId = $this->orderModel->getAllBoxes();
 
+            $this->orderModel->getDb()->beginTransaction();
 
+            $insertedAddressId = $this->orderModel->addAddress($address);
 
+            $insertedUserId = $this->orderModel->addUser($user);
 
+            $orderData['deliveryId'] = $insertedAddressId;
+            $orderData['userId'] = $insertedUserId;
 
+            $order = $this->orderModel->createOrderEntity(...$orderData);
+            $orderId = $this->orderModel->addOrder($order);
+
+            $orderDetailsArray = $this->orderModel->createOrderDetailsArray($newOrderData['products'], $orderId);
+            $this->orderModel->addOrderDetails($orderDetailsArray);
+
+            $orderComplete = $this->orderModel->getDb()->commit();
 
         } catch (\PDOException $exception) {
             $data['message'] = $exception->getMessage();
         }
 
-        if (!empty($boxes)) {
+        if (!empty($orderComplete)) {
             $data = [
                 'status' => true,
-                'message' => 'Boxes retrieved',
-                'data' => $boxes
+                'message' => 'Order created',
+                'data' => []
             ];
             $statusCode = 200;
         }
