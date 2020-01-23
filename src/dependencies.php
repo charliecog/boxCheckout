@@ -33,5 +33,6 @@ return function (App $app) {
 
     $container['GetBoxesController'] = new \BoxCheckout\Factories\GetBoxesControllerFactory();
     $container['AddOrderController'] = new \BoxCheckout\Factories\AddOrderControllerFactory();
+    $container['UnsupportedRouteController'] = new \BoxCheckout\Factories\UnsupportedRouteControllerFactory();
 
 };
