@@ -1,12 +1,13 @@
 # Box Checkout Application
 
-An API providing the backend for an ecommerce system that allows purchasing of boxes of various sizes and strengths.
+An API that allows order storage of box products of various sizes and strengths alongside user information.
 
 Prerequisites:
  
     - PHP version 7.0.0+, 
     - MySQL version 5.7 + 
-    - Composer
+    - Composer version 1+
+    - PHPUnit version 6.5+
 
 ## Install this Application
 
@@ -44,7 +45,7 @@ localhost:8080
 
 ## API ENDPOINTS (ROUTES)
 
-For testing API endpoints [Postman](https://www.getpostman.com/) is recommended. It should bypass any cross origin request issues you may find.
+For testing API endpoints [Postman](https://www.getpostman.com/) is recommended. It should bypass any cross origin request issues you may find when testing.
 
 **Get all boxes**
 ----
