@@ -249,7 +249,7 @@ For testing API endpoints [Postman](https://www.getpostman.com/) is recommended.
           }
       })
 	    .then((data)=> data.json)
-	    .then((boxes)=> {
-		    console.log(boxes)
+	    .then((response)=> {
+		    console.log(response)
 	    })
   ```
