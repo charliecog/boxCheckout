@@ -94,8 +94,8 @@ class OrderModel
         string $lastName,
         string $email,
         string $phone,
-        string $businessName,
-        string $secondaryPhone
+        $businessName = null,
+        $secondaryPhone = null
     ): UserEntity {
         return new UserEntity(
             $title,
@@ -220,5 +220,34 @@ class OrderModel
         }
 
         return $this->db->lastInsertId();
+    }
+
+    public function checkAllKeysPresent(array $requestData): bool
+    {
+        if(
+            !isset($requestData['address']) ||
+            !isset($requestData['address']['firstLine']) ||
+            !isset($requestData['address']['secondLine']) ||
+            !isset($requestData['address']['town']) ||
+            !isset($requestData['address']['postcode']) ||
+            !isset($requestData['address']['county']) ||
+            !isset($requestData['address']['country']) ||
+            !isset($requestData['user']) ||
+            !isset($requestData['user']['title']) ||
+            !isset($requestData['user']['firstName']) ||
+            !isset($requestData['user']['lastName']) ||
+            !isset($requestData['user']['email']) ||
+            !isset($requestData['user']['phone']) ||
+            !isset($requestData['products']) ||
+            count($requestData['products']) < 1 ||
+            !isset($requestData['totalPrice']) ||
+            !isset($requestData['discount']) ||
+            !isset($requestData['totalPriceCharged']) ||
+            !isset($requestData['paymentId'])
+        ){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

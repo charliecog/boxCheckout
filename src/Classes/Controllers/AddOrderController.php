@@ -32,10 +32,39 @@ class AddOrderController
         ];
         $statusCode = 400;
 
+        try {
+
         $newOrderData = $request->getParsedBody();
 
-        $address = $this->orderModel->createAddressEntity(...$newOrderData['address']);
-        $user = $this->orderModel->createUserEntity(...$newOrderData['user']);
+        if($this->orderModel->checkAllKeysPresent($newOrderData)){
+            $data['message'] = 'Please check the data has been sent in the correct format';
+            return $response->withJson($data, $statusCode);
+        }
+
+        $addressData = $newOrderData['address'];
+
+        $address = $this->orderModel->createAddressEntity(
+            $addressData['firstLine'],
+            $addressData['secondLine'],
+            $addressData['town'],
+            $addressData['postcode'],
+            $addressData['county'],
+            $addressData['country']);
+
+
+        $userData = $newOrderData['user'];
+
+        $businessName = $userData['businessName'] ?: null;
+        $secondaryPhone = $userData['secondaryPhone'] ?: null;
+
+        $user = $this->orderModel->createUserEntity(
+            $userData['title'],
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['email'],
+            $userData['phone'],
+            $businessName,
+            $secondaryPhone);
 
         $orderData = [
             'userId'=> null,
@@ -43,10 +72,8 @@ class AddOrderController
             'paymentId'=> $newOrderData['paymentId'],
             'totalPrice'=> $newOrderData['totalPrice'],
             'discountApplied'=> $newOrderData['discount'],
-            'totalChargedPrice'=> $newOrderData['totalChargedPrice']
+            'totalPriceCharged'=> $newOrderData['totalPriceCharged']
         ];
-
-        try {
 
             $this->orderModel->getDb()->beginTransaction();
 
@@ -57,26 +84,32 @@ class AddOrderController
             $orderData['deliveryId'] = $insertedAddressId;
             $orderData['userId'] = $insertedUserId;
 
-            $order = $this->orderModel->createOrderEntity(...$orderData);
+            $order = $this->orderModel->createOrderEntity(
+                $orderData['userId'],
+                $orderData['deliveryId'],
+                $orderData['paymentId'],
+                $orderData['totalPrice'],
+                $orderData['discountApplied'],
+                $orderData['totalPriceCharged']);
             $orderId = $this->orderModel->addOrder($order);
 
             $orderDetailsArray = $this->orderModel->createOrderDetailsArray($newOrderData['products'], $orderId);
-            $this->orderModel->addOrderDetails($orderDetailsArray);
+            $orderComplete = $this->orderModel->addOrderDetails($orderDetailsArray);
 
-            $orderComplete = $this->orderModel->getDb()->commit();
+            $this->orderModel->getDb()->commit();
+            $data['data']['orderId'] = $orderId;
 
-        } catch (\PDOException $exception) {
+        } catch (\PDOException $PDOException) {
+            $data['message'] = 'There has been an error with the database, please contact an admin';
+        } catch (\Exception $exception){
             $data['message'] = $exception->getMessage();
-        } catch (\Exception $exception) {
-            $data['message'] = $exception->getMessage();
+        } catch (\TypeError $typeError) {
+            $data['message'] = 'Please be sure to send the data in the correct format';
         }
 
         if (!empty($orderComplete)) {
-            $data = [
-                'status' => true,
-                'message' => 'Order created',
-                'data' => []
-            ];
+            $data['status'] = true;
+            $data['message'] = 'Order created';
             $statusCode = 200;
         }
 
