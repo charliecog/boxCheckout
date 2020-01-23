@@ -29,7 +29,10 @@ return function (App $app) {
     };
 
     $container['BoxModel'] = new \BoxCheckout\Factories\BoxModelFactory();
-    
+    $container['OrderModel'] = new \BoxCheckout\Factories\OrderModelFactory();
+
     $container['GetBoxesController'] = new \BoxCheckout\Factories\GetBoxesControllerFactory();
+    $container['AddOrderController'] = new \BoxCheckout\Factories\AddOrderControllerFactory();
+    $container['UnsupportedRouteController'] = new \BoxCheckout\Factories\UnsupportedRouteControllerFactory();
 
 };
