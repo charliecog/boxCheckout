@@ -37,6 +37,7 @@ class AddOrderController
         $newOrderData = $request->getParsedBody();
 
         if($this->orderModel->checkAllKeysPresent($newOrderData)){
+            $data['message'] = 'Please check the data has been sent in the correct format';
             return $response->withJson($data, $statusCode);
         }
 
@@ -99,9 +100,11 @@ class AddOrderController
             $data['data']['orderId'] = $orderId;
 
         } catch (\PDOException $PDOException) {
-            $data['message'] = $PDOException->getMessage();
+            $data['message'] = 'There has been an error with the database, please contact an admin';
         } catch (\Exception $exception){
             $data['message'] = $exception->getMessage();
+        } catch (\TypeError $typeError) {
+            $data['message'] = 'Please be sure to send the data in the correct format';
         }
 
         if (!empty($orderComplete)) {
