@@ -65,12 +65,21 @@ class OrderModel
         $query = $this->db->prepare(
             "INSERT INTO `addresses` (`first_line`, `second_line`, `town`, `post_code`, `county`, `country`) VALUES (:firstLine, :secondLine, :town, :postcode, :county, :country);"
         );
-        $query->bindParam(':firstLine', $address->getFirstLine());
-        $query->bindParam(':secondLine', $address->getSecondLine());
-        $query->bindParam(':town', $address->getTown());
-        $query->bindParam(':postcode', $address->getPostcode());
-        $query->bindParam(':county', $address->getCounty());
-        $query->bindParam(':country', $address->getCountry());
+
+        //variables defined to prevent php notice when passing method into bindparam
+        $firstLine = $address->getFirstLine();
+        $secondLine = $address->getSecondLine();
+        $town = $address->getTown();
+        $postcode = $address->getPostcode();
+        $county = $address->getCounty();
+        $country = $address->getCountry();
+
+        $query->bindParam(':firstLine', $firstLine);
+        $query->bindParam(':secondLine', $secondLine);
+        $query->bindParam(':town', $town);
+        $query->bindParam(':postcode', $postcode);
+        $query->bindParam(':county', $county);
+        $query->bindParam(':country', $country);
         $query->execute();
         return $this->db->lastInsertId();
     }
@@ -119,13 +128,23 @@ class OrderModel
         $query = $this->db->prepare(
             "INSERT INTO `users` (`title`, `first_name`, `last_name`, `business_name`, `email`, `phone`, `secondary_phone`) VALUES (:title, :firstName, :lastName, :businessName, :email, :phone, :secondaryPhone);"
         );
-        $query->bindParam(':title', $user->getTitle());
-        $query->bindParam(':firstName', $user->getFirstName());
-        $query->bindParam(':lastName', $user->getLastName());
-        $query->bindParam(':businessName', $user->getBusinessName());
-        $query->bindParam(':email', $user->getEmail());
-        $query->bindParam(':phone', $user->getPhone());
-        $query->bindParam(':secondaryPhone', $user->getSecondaryPhone());
+
+        //variables defined to prevent php notice when passing method into bindparam
+        $title = $user->getTitle();
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+        $businessName = $user->getBusinessName();
+        $email = $user->getEmail();
+        $phone = $user->getPhone();
+        $secondaryPhone = $user->getSecondaryPhone();
+
+        $query->bindParam(':title', $title);
+        $query->bindParam(':firstName', $firstName);
+        $query->bindParam(':lastName', $lastName);
+        $query->bindParam(':businessName', $businessName);
+        $query->bindParam(':email', $email);
+        $query->bindParam(':phone', $phone);
+        $query->bindParam(':secondaryPhone', $secondaryPhone);
         $query->execute();
         return $this->db->lastInsertId();
     }
@@ -171,12 +190,21 @@ class OrderModel
         $query = $this->db->prepare(
             "INSERT INTO `orders` (`user_id`, `delivery_address_id`, `payment_transaction_id`, `total_price`, `discount_applied`, `total_charged_price`) VALUES (:userId, :deliveryId, :paymentId, :totalPrice, :discountApplied, :totalChargedPrice);"
         );
-        $query->bindParam(':userId', $order->getUserId());
-        $query->bindParam(':deliveryId', $order->getDeliveryId());
-        $query->bindParam(':paymentId', $order->getPaymentId());
-        $query->bindParam(':totalPrice', $order->getTotalPrice());
-        $query->bindParam(':discountApplied', $order->getDiscountApplied());
-        $query->bindParam(':totalChargedPrice', $order->getTotalChargedPrice());
+
+        //variables defined to prevent php notice when passing method into bindparam
+        $userId = $order->getUserId();
+        $deliveryId = $order->getDeliveryId();
+        $paymentId = $order->getPaymentId();
+        $totalPrice = $order->getTotalPrice();
+        $discountApplied = $order->getDiscountApplied();
+        $totalChargedPrice = $order->getTotalChargedPrice();
+
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':deliveryId', $deliveryId);
+        $query->bindParam(':paymentId', $paymentId);
+        $query->bindParam(':totalPrice', $totalPrice);
+        $query->bindParam(':discountApplied', $discountApplied);
+        $query->bindParam(':totalChargedPrice', $totalChargedPrice);
         $query->execute();
         return $this->db->lastInsertId();
     }
@@ -212,9 +240,14 @@ class OrderModel
         );
         foreach ($arrOfOrderDetails as $orderDetails){
             if($orderDetails instanceof OrderDetailsEntity){
-                $query->bindParam(':orderId', $orderDetails->getOrderId());
-                $query->bindParam(':boxId', $orderDetails->getBoxId());
-                $query->bindParam(':quantity', $orderDetails->getQuantity());
+                //variables defined to prevent php notice when passing method into bindparam
+                $orderId = $orderDetails->getOrderId();
+                $boxId = $orderDetails->getBoxId();
+                $quantity = $orderDetails->getQuantity();
+
+                $query->bindParam(':orderId', $orderId);
+                $query->bindParam(':boxId', $boxId);
+                    $query->bindParam(':quantity', $quantity);
                 $query->execute();
             }
         }
