@@ -6,7 +6,6 @@ use BoxCheckout\Entities\AddressEntity;
 use BoxCheckout\Entities\OrderDetailsEntity;
 use BoxCheckout\Entities\OrderEntity;
 use BoxCheckout\Entities\UserEntity;
-use function Sodium\add;
 
 class OrderModel
 {
